@@ -1,0 +1,93 @@
+﻿function Record(text,date) {
+	this.text=text;
+	this.date=date;
+	this.time=function(){
+		return this.date.toLocaleTimeString();
+	}
+	this.day=function(){
+		return this.date.toLocaleDateString();
+	}
+}
+
+var records=
+[
+new Record("Доброе утро!",
+	new Date(2020, 04, 20, 07, 00, 0, 0)),
+new Record("Как дела?",
+	new Date(2020, 04, 20, 07, 10, 0, 0)),
+new Record("Все отлично!",
+	new Date(2020, 04, 20, 07, 15, 0, 0)),
+new Record("Собираюсь на работу...",
+	new Date(2020, 04, 20, 07, 20, 0, 0)),
+new Record("Удачного дня!",
+	new Date(2020, 04, 20, 07, 30, 0, 0)),
+	
+];
+
+function time(date) {
+	return ""+date.toLocaleTimeString();
+}
+
+function day(date){
+	return "" + date.toLocaleDateString();
+}
+
+function displayRecords(){
+	var text="";
+	var odd=true;
+	for (var i in records)
+	{
+		if(odd)
+		{
+			text +="<p style='background-color:gray'>";
+		}
+		else {text +="<p style='background-color:lightgray'>";
+		}
+		odd=!odd;
+		text += records[i].time()+ " ";
+		text += "<strong>" + records[i].day()+"</strong><br>";
+		text += records[i].text+"</p>";
+	}
+	document.getElementById("records_place").innerHTML=text;
+}
+
+function send() {
+	var r= new Record (document.getElementById("newtext").value,
+	new Date());
+	records.push(r);
+	displayRecords();
+}
+
+function sort(compare)
+{
+	var l=records.length;
+	for (var i=0;i<l-1;i++)
+	{
+		var j_min=i;
+		for (var j=i+1;j<l;j++)
+		{
+			if(compare(records[j],records[j_min])){
+				j_min=j;
+			}
+		}
+	var r=records[j_min];
+	records[j_min]=records[i];
+	records[i]=r;
+	}
+	displayRecords();
+}
+var comparers=[
+function comp1(r1,r2){
+	return r1.date<r2.date;
+},
+function comp2(r1,r2){
+	return r1.date>r2.date;
+},
+function comp3(r1,r2)
+{
+	return r1.text<r2.text;
+},
+function comp4(r1,r2){
+	return r1.text>r2.text;
+}
+];
